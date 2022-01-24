@@ -67,7 +67,7 @@ export default function PaginaInicial() {
             <GlobalStyle />
             <Box
                 styleSheet={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'left',
+                    display: 'flex', alignItems: 'center', justifyContent: 'right',
                     backgroundColor: appConfig.theme.colors.primary['050'],
                     backgroundImage: 'url(https://c1.staticflickr.com/3/2918/33514749501_4185bfa22c_b.jpg)',
                     backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
