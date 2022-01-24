@@ -82,8 +82,8 @@ export default function PaginaInicial() {
                             xs: 'column',
                             sm: 'row',
                         },
-                        width: '100%', maxWidth: '600px',
-                        borderRadius: '8px', padding: '32px', margin: '20px', marginBottom: '300px',
+                        width: '100%', maxWidth: '580px',
+                        borderRadius: '8px', padding: '32px', margin: '20px', marginBottom: '305px',
                         boxShadow: '0 5px 10px 0 rgb(0 0 0 / 20%)',
                         backgroundColor: appConfig.theme.colors.neutrals[700],
                     }}
