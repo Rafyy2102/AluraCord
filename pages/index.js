@@ -67,9 +67,9 @@ export default function PaginaInicial() {
             <GlobalStyle />
             <Box
                 styleSheet={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'right',
+                    display: 'flex', alignItems: 'center', justifyContent: 'left',
                     backgroundColor: appConfig.theme.colors.primary['050'],
-                    backgroundImage: 'url(https://i.pinimg.com/originals/10/03/77/1003770a3e44af7250dc0df7daedf5a0.jpg)',
+                    backgroundImage: 'url(https://c1.staticflickr.com/3/2918/33514749501_4185bfa22c_b.jpg)',
                     backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 }}
             >
@@ -83,7 +83,7 @@ export default function PaginaInicial() {
                             sm: 'row',
                         },
                         width: '100%', maxWidth: '600px',
-                        borderRadius: '8px', padding: '32px', margin: '20px', marginTop: '300px',
+                        borderRadius: '8px', padding: '32px', margin: '20px', marginBottom: '300px',
                         boxShadow: '0 5px 10px 0 rgb(0 0 0 / 20%)',
                         backgroundColor: appConfig.theme.colors.neutrals[700],
                     }}
