@@ -67,9 +67,10 @@ export default function PaginaInicial() {
             <GlobalStyle />
             <Box
                 styleSheet={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'right',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
                     backgroundColor: appConfig.theme.colors.primary['050'],
-                    backgroundImage: 'url(https://c1.staticflickr.com/3/2918/33514749501_4185bfa22c_b.jpg)',
+                    backgroundImage: 'url(https://nobleorderbrewing.com/img/lists/05/one-piece-10-things-about-nefertari-vivi-that-make-no-sense-8.jpg)',
+                    //backgroundImage: 'url(https://c1.staticflickr.com/3/2918/33514749501_4185bfa22c_b.jpg)',
                     backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 }}
             >
@@ -82,8 +83,8 @@ export default function PaginaInicial() {
                             xs: 'column',
                             sm: 'row',
                         },
-                        width: '100%', maxWidth: '580px',
-                        borderRadius: '8px', padding: '30px', margin: '15px', marginBottom: '305px',
+                        width: '100%', maxWidth: '800px',
+                        borderRadius: '8px', padding: '32px', margin: '-320px', marginTop: '0px',
                         boxShadow: '0 5px 10px 0 rgb(0 0 0 / 20%)',
                         backgroundColor: appConfig.theme.colors.neutrals[700],
                     }}
