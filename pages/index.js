@@ -60,16 +60,16 @@ function HomePage() {
 //export default HomePage
 
 export default function PaginaInicial() {
-    const username = 'peas';
+    const username = 'Rafyy2102';
 
     return (
         <>
             <GlobalStyle />
             <Box
                 styleSheet={{
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    display: 'flex', alignItems: 'center', justifyContent: 'right',
                     backgroundColor: appConfig.theme.colors.primary['050'],
-                    backgroundImage: 'url(https://virtualbackgrounds.site/wp-content/uploads/2020/11/assassins-creed-odyssey-landscape-1536x864.jpg)',
+                    backgroundImage: 'url(https://i.pinimg.com/originals/10/03/77/1003770a3e44af7250dc0df7daedf5a0.jpg)',
                     backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 }}
             >
@@ -82,8 +82,8 @@ export default function PaginaInicial() {
                             xs: 'column',
                             sm: 'row',
                         },
-                        width: '100%', maxWidth: '700px',
-                        borderRadius: '5px', padding: '32px', margin: '16px',
+                        width: '100%', maxWidth: '600px',
+                        borderRadius: '8px', padding: '32px', margin: '20px', marginTop: '300px',
                         boxShadow: '0 5px 10px 0 rgb(0 0 0 / 20%)',
                         backgroundColor: appConfig.theme.colors.neutrals[700],
                     }}
@@ -149,7 +149,7 @@ export default function PaginaInicial() {
                                 marginBottom: '16px',
                             }}
                             src={`https://github.com/${username}.png`}
-                            
+                                                        
                         />
                         <Text
                             variant="body4"
