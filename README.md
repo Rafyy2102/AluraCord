@@ -1,6 +1,6 @@
 # AluraCord - Rafyy2102
 
-Projeto feito na Imersão React 4 da @alura com @omariosouto e o @peas
+Projeto feito na Imersão React 4 da @alura com @Mário Souto e o @Paulo Silveira
 
 ## Tecnologias
 
