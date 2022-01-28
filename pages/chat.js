@@ -1,5 +1,6 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
+import { useRouter } from 'next/router';
 import appConfig from '../config.json';
 import { createClient } from '@supabase/supabase-js';
 
@@ -7,33 +8,29 @@ const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5v
 const SUPABASE_URL = 'https://grodaecetqgepjoaaqfi.supabase.co';
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
-
 export default function ChatPage() {
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
+    const roteamento  = useRouter();
+    const username = roteamento.query.user;
 
     React.useEffect(() => {
         supabaseClient.from('mensagens').select('*').order('id',{ascending: false})
             .then(({ data }) => {
                 setListaDeMensagens(data);
-            });
-
-    }, []);
+            });}, []);
 
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
-           // id: listaDeMensagens.length + 1,
-            de: '',
+            de: username,
             texto: novaMensagem,
         };
 
         supabaseClient.from('mensagens').insert([mensagem]).then(({data})=>{
             setListaDeMensagens([
-                data[0],
-                ...listaDeMensagens,
+                data[0], ...listaDeMensagens,
             ]);
-        });
- 
+        }); 
         setMensagem('');
     }
 
@@ -42,8 +39,7 @@ export default function ChatPage() {
             styleSheet={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 backgroundColor: appConfig.theme.colors.primary['050'],
-                backgroundImage: 'url(https://nobleorderbrewing.com/img/lists/05/one-piece-10-things-about-nefertari-vivi-that-make-no-sense-8.jpg)',
-                //backgroundImage: 'url(https://c1.staticflickr.com/3/2918/33514749501_4185bfa22c_b.jpg)',
+                backgroundImage: 'url(https://c1.staticflickr.com/3/2918/33514749501_4185bfa22c_b.jpg)',
                 backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 color: appConfig.theme.colors.neutrals['100']
             }}

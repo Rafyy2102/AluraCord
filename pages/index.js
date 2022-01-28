@@ -1,6 +1,6 @@
 import { Box, Button, Text, TextField, Image } from '@skynexui/components';
-import React from 'react';
 import { useRouter } from 'next/router';
+import React, { useState } from 'react';
 import appConfig from '../config.json';
 
 function Titulo(props) {
@@ -19,20 +19,31 @@ function Titulo(props) {
     );
 }
 
-export default function PaginaInicial() {
-    //const username = 'Rafyy2102';
+export default function PaginaInicial() {  
+    const [userbio, setUserBio] = useState('');
     const [username, setUsername] = React.useState('');
+    const userURL = `https://api.github.com/users/${username}`
     const roteamento = useRouter();
 
+    function handleChange(event) {
+        setUsername(event.target.value)
+
+        if (event.target.value.length > 2) {
+            fetch(userURL)
+                .then(response => response.json())
+                .then(data => setUserBio(data.bio))
+        }
+    }
+
+    const imageSemUser = 'https://pa1.narvii.com/6208/60ee7a4fe7710a029531a62584ed8b01640db422_hq.gif';
+   
     return (
         <>
-           
             <Box
                 styleSheet={{
                     display: 'flex', alignItems: 'center', justifyContent: 'center',
                     backgroundColor: appConfig.theme.colors.primary['050'],
                     backgroundImage: 'url(https://nobleorderbrewing.com/img/lists/05/one-piece-10-things-about-nefertari-vivi-that-make-no-sense-8.jpg)',
-                    //backgroundImage: 'url(https://c1.staticflickr.com/3/2918/33514749501_4185bfa22c_b.jpg)',
                     backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 }}
             >
@@ -54,39 +65,30 @@ export default function PaginaInicial() {
                     {/* Formulário */}
                     <Box
                         as="form"
-                        onSubmit={function (infosDoEvento){
-                            infosDoEvento.preventDefault();
-                            console.log('Alguém esta submetendo o form');
-                            roteamento.push('/chat');
-                        } }
+                        onSubmit={function (infosDoEvento) {
+                            infosDoEvento.preventDefault();                           
+                            roteamento.push('/chat?user=${username}');
+                        }}
                         styleSheet={{
                             display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
                             width: { xs: '100%', sm: '50%' }, textAlign: 'center', marginBottom: '32px',
                         }}
                     >
                         <Titulo tag="h2">Bem vindos 😉</Titulo>
-                        <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[999]}}>
+                        <Text variant="body3" styleSheet={{ marginBottom: '32px', color: appConfig.theme.colors.neutrals[999] }}>
                             {appConfig.name}
                         </Text>
 
-                        {/* <input type="text" 
-                        value={username} onChange={function handler(event){
-                            console.log('usuario digito', event.target.value);
-                            //onde ta o valor
-                            const valor = event.target.value;
-                            //trocar o valor pelo react
-                            setUsername(valor);
-                        }}
-                    />*/}
                         <TextField
-                            value={username} onChange={function handler(event) {
-                                console.log('usuario digito', event.target.value);
+                            value={username} onChange={function handler(event) {                                
                                 //onde ta o valor
                                 const valor = event.target.value;
                                 //trocar o valor pelo react
                                 setUsername(valor);
                             }}
                             fullWidth
+                            value={username}
+                            onChange={handleChange}
                             textFieldColors={{
                                 neutral: {
                                     textColor: appConfig.theme.colors.neutrals[200],
@@ -130,24 +132,49 @@ export default function PaginaInicial() {
                         <Image
                             styleSheet={{
                                 borderRadius: '50%',
+                                width:'150px',
+                                height:'150px',
                                 marginBottom: '16px',
                             }}
-                            src={`https://github.com/${username}.png`}
+                            
+                            src={
+                                username.length > 2
+                                    ? `https://github.com/${username}.png`
+                                    : imageSemUser
+                            }
 
                         />
-                        <Text
-                            variant="body4"
-                            styleSheet={{
-                                color: appConfig.theme.colors.neutrals[200],
-                                backgroundColor: appConfig.theme.colors.neutrals[900],
-                                padding: '3px 10px',
-                                borderRadius: '1000px'
-                            }}
-                        >
-                            {username}
-                        </Text>
-                    </Box>
-                    {/* Photo Area */}
+                        {
+                            username.length > 2 && (
+                                <>
+                                    <Text
+                                        variant="body4"
+                                        styleSheet={{
+                                            color: appConfig.theme.colors.neutrals[200],
+                                            backgroundColor: appConfig.theme.colors.neutrals[900],
+                                            padding: '3px 10px',
+                                            borderRadius: '1000px'
+                                        }}
+                                    >
+                                        {username}
+                                    </Text>
+
+                                    <Text
+                                        variant="body4"
+                                        styleSheet={{
+                                            color: appConfig.theme.colors.neutrals[200],
+                                            backgroundColor: appConfig.theme.colors.neutrals[900],
+                                            padding: '3px 10px',
+                                            borderRadius: '1000px'
+                                        }}
+                                    >
+                                        {userbio}
+                                    </Text>
+                                </>
+                            )
+                        }
+
+                    </Box>                  
                 </Box>
             </Box>
         </>
