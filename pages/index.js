@@ -19,19 +19,6 @@ function Titulo(props) {
     );
 }
 
-/*
-function HomePage() {
-    return (
-        <div>
-            <GlobalStyle />
-            <Titulo tag="h2">Bem vindos 😉!</Titulo>
-            <h2>Discord - Rafyy2102 🚀🚀</h2>
-        </div>
-    )
-}
-*/
-//export default HomePage
-
 export default function PaginaInicial() {
     //const username = 'Rafyy2102';
     const [username, setUsername] = React.useState('');

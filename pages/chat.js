@@ -1,29 +1,45 @@
 import { Box, Text, TextField, Image, Button } from '@skynexui/components';
 import React from 'react';
 import appConfig from '../config.json';
+import { createClient } from '@supabase/supabase-js';
+
+const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzM4MzA2OSwiZXhwIjoxOTU4OTU5MDY5fQ.9oZkPp8lb-7mbv6NVkmVUYaD0Z_AR7BA9Br6GSL_swQ';
+const SUPABASE_URL = 'https://grodaecetqgepjoaaqfi.supabase.co';
+const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 
 export default function ChatPage() {
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
 
+    React.useEffect(() => {
+        supabaseClient.from('mensagens').select('*').order('id',{ascending: false})
+            .then(({ data }) => {
+                setListaDeMensagens(data);
+            });
+
+    }, []);
 
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
-            id: listaDeMensagens.length + 1,
+           // id: listaDeMensagens.length + 1,
             de: '',
             texto: novaMensagem,
         };
-        setListaDeMensagens([
-            mensagem,
-            ...listaDeMensagens,
-            
-        ]);
+
+        supabaseClient.from('mensagens').insert([mensagem]).then(({data})=>{
+            setListaDeMensagens([
+                data[0],
+                ...listaDeMensagens,
+            ]);
+        });
+ 
         setMensagem('');
     }
 
     return (
         <Box
-            styleSheet={{              
+            styleSheet={{
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 backgroundColor: appConfig.theme.colors.primary['050'],
                 backgroundImage: 'url(https://nobleorderbrewing.com/img/lists/05/one-piece-10-things-about-nefertari-vivi-that-make-no-sense-8.jpg)',
@@ -60,16 +76,6 @@ export default function ChatPage() {
                     }}
                 >
                     <MessageList mensagens={listaDeMensagens} />
-
-                    {/*
-                    {listaDeMensagens.map((mensagemAtual) => {                        
-                        return (
-                            <li key={mensagemAtual.id}>
-                                {mensagemAtual.de}: {mensagemAtual.texto}
-                            </li>
-                        )
-                    })}
-                */}
                     <Box
                         as="form"
                         styleSheet={{
@@ -116,7 +122,7 @@ function Header() {
                 <Text variant='heading5'>
                     Chat
                 </Text>
-                <Button                    
+                <Button
                     variant='secondary'
                     //colorVariant='light'
                     label='Logout'
@@ -133,10 +139,10 @@ function MessageList(props) {
         <Box
             tag="ul"
             styleSheet={{
-                overflow: 'auto',               
+                overflow: 'auto',
                 display: 'flex',
                 flexDirection: 'column-reverse',
-                flex: 1,               
+                flex: 1,
                 color: appConfig.theme.colors.neutrals["100"],
                 marginBottom: '16px',
             }}
@@ -169,9 +175,8 @@ function MessageList(props) {
                                     borderRadius: '50%',
                                     display: 'inline-block',
                                     marginRight: '8px',
-                                }}
-                                src={`https://github.com/mariomess.png`}
-                                //src={`https://github.com/${username}.png`}
+                                }}                               
+                                src={`https://github.com/${mensagem.de}.png`}
                             />
                             <Text tag="strong">
                                 {mensagem.de}
