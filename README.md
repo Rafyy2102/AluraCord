@@ -13,6 +13,7 @@ As seguintes ferramentas foram usadas na construção do projeto:
 - [Next](https://nextjs.org)
 - [SkynexUI](https://skynexui.dev)
 - [Vercel](https://vercel.com/)
+- [Supabase](https://app.supabase.io)
 
 ## Como executar o projeto
 
