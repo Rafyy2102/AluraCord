@@ -3,34 +3,53 @@ import React from 'react';
 import { useRouter } from 'next/router';
 import appConfig from '../config.json';
 import { createClient } from '@supabase/supabase-js';
+import { ButtonSendSticker } from '../src/components/ButtonSendSticker';
 
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJyb2xlIjoiYW5vbiIsImlhdCI6MTY0MzM4MzA2OSwiZXhwIjoxOTU4OTU5MDY5fQ.9oZkPp8lb-7mbv6NVkmVUYaD0Z_AR7BA9Br6GSL_swQ';
 const SUPABASE_URL = 'https://grodaecetqgepjoaaqfi.supabase.co';
 const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+function escutaMensagemTempoReal(adicionaMensagem) {
+    return supabaseClient.from('mensagem')
+        .on('INSERT', (repostaLive) => { adicionaMensagem(repostaLive.new) }).subscribe();
+}
+
 export default function ChatPage() {
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
-    const roteamento  = useRouter();
-    const username = roteamento.query.user;
+    const roteamento = useRouter();
+    const userLogado = roteamento.query.username;
 
     React.useEffect(() => {
-        supabaseClient.from('mensagens').select('*').order('id',{ascending: false})
+        supabaseClient
+        .from('mensagens')
+        .select('*')
+        .order('id', { ascending: false })
             .then(({ data }) => {
                 setListaDeMensagens(data);
-            });}, []);
+            });
+       const subscribe =  escutaMensagemTempoReal((novaMensagem) => {
+            setListaDeMensagens((valorAtualDaLista) => {
+                return [
+                    novaMensagem,
+                    ...listaDeMensagens
+                ]
+            });
+           
+        });
+        return() =>{
+            subscribe.unsubscribe();
+        }
+    }, []);
 
     function handleNovaMensagem(novaMensagem) {
         const mensagem = {
-            de: username,
+            de: userLogado,
             texto: novaMensagem,
         };
 
-        supabaseClient.from('mensagens').insert([mensagem]).then(({data})=>{
-            setListaDeMensagens([
-                data[0], ...listaDeMensagens,
-            ]);
-        }); 
+        supabaseClient.from('mensagens').insert([mensagem])
+            .then(({ data }) => { });
         setMensagem('');
     }
 
@@ -104,6 +123,9 @@ export default function ChatPage() {
                                 color: appConfig.theme.colors.neutrals[200],
                             }}
                         />
+                        <ButtonSendSticker
+                            onStickerClick={(sticker) => { handleNovaMensagem(':sticker: ' + sticker); }}
+                        />
                     </Box>
                 </Box>
             </Box>
@@ -120,7 +142,6 @@ function Header() {
                 </Text>
                 <Button
                     variant='secondary'
-                    //colorVariant='light'
                     label='Logout'
                     href="/"
                 />
@@ -129,8 +150,7 @@ function Header() {
     )
 }
 
-function MessageList(props) {
-    console.log(props);
+function MessageList(props) {   
     return (
         <Box
             tag="ul"
@@ -171,7 +191,7 @@ function MessageList(props) {
                                     borderRadius: '50%',
                                     display: 'inline-block',
                                     marginRight: '8px',
-                                }}                               
+                                }}
                                 src={`https://github.com/${mensagem.de}.png`}
                             />
                             <Text tag="strong">
@@ -188,7 +208,12 @@ function MessageList(props) {
                                 {(new Date().toLocaleDateString())}
                             </Text>
                         </Box>
-                        {mensagem.texto}
+                        {mensagem.texto.startsWith(':sticker:')
+                            ? (<Image src={mensagem.texto.replace(':sticker:', '')} />
+                            )
+                            : (
+                                mensagem.texto
+                            )}
                     </Text>
                 );
             })}
