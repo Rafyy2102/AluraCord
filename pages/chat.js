@@ -11,33 +11,33 @@ const supabaseClient = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 function escutaMensagemTempoReal(adicionaMensagem) {
     return supabaseClient.from('mensagem')
-        .on('INSERT', (repostaLive) => { adicionaMensagem(repostaLive.new) }).subscribe();
+        .on('INSERT', (repostaLive) => { adicionaMensagem(repostaLive.new); }).subscribe();
 }
 
 export default function ChatPage() {
     const [mensagem, setMensagem] = React.useState('');
     const [listaDeMensagens, setListaDeMensagens] = React.useState([]);
     const roteamento = useRouter();
-    const userLogado = roteamento.query.username;
+    const userLogado = roteamento.query.username;   
 
     React.useEffect(() => {
         supabaseClient
-        .from('mensagens')
-        .select('*')
-        .order('id', { ascending: false })
+            .from('mensagens')
+            .select('*')
+            .order('id', { ascending: false })
             .then(({ data }) => {
                 setListaDeMensagens(data);
             });
-       const subscribe =  escutaMensagemTempoReal((novaMensagem) => {
+        const subscribe = escutaMensagemTempoReal((novaMensagem) => {
             setListaDeMensagens((valorAtualDaLista) => {
                 return [
                     novaMensagem,
                     ...listaDeMensagens
                 ]
             });
-           
+
         });
-        return() =>{
+        return () => {
             subscribe.unsubscribe();
         }
     }, []);
@@ -48,9 +48,11 @@ export default function ChatPage() {
             texto: novaMensagem,
         };
 
-        supabaseClient.from('mensagens').insert([mensagem])
-            .then(({ data }) => { });
-        setMensagem('');
+        //novo
+        if (novaMensagem.length !== null && novaMensagem.trim()) {
+            supabaseClient.from('mensagens').insert([mensagem]).then(({ data }) => { });
+            setMensagem('');
+        }
     }
 
     return (
@@ -59,6 +61,7 @@ export default function ChatPage() {
                 display: 'flex', alignItems: 'center', justifyContent: 'center',
                 backgroundColor: appConfig.theme.colors.primary['050'],
                 backgroundImage: 'url(https://c1.staticflickr.com/3/2918/33514749501_4185bfa22c_b.jpg)',
+                //src='https://c.tenor.com/DSQgApPPzgYAAAAd/anime-loading.gif'
                 backgroundRepeat: 'no-repeat', backgroundSize: 'cover', backgroundBlendMode: 'multiply',
                 color: appConfig.theme.colors.neutrals['100']
             }}
@@ -77,6 +80,7 @@ export default function ChatPage() {
                     padding: '32px',
                 }}
             >
+
                 <Header />
                 <Box
                     styleSheet={{
@@ -90,6 +94,7 @@ export default function ChatPage() {
                         padding: '16px',
                     }}
                 >
+
                     <MessageList mensagens={listaDeMensagens} />
                     <Box
                         as="form"
@@ -142,7 +147,7 @@ function Header() {
                 </Text>
                 <Button
                     variant='secondary'
-                    label='Logout'
+                    label='SAIR'
                     href="/"
                 />
             </Box>
@@ -150,7 +155,7 @@ function Header() {
     )
 }
 
-function MessageList(props) {   
+function MessageList(props) {
     return (
         <Box
             tag="ul"
@@ -204,7 +209,7 @@ function MessageList(props) {
                                     color: appConfig.theme.colors.neutrals[100],
                                 }}
                                 tag="span"
-                            >
+                            >                                
                                 {(new Date().toLocaleDateString())}
                             </Text>
                         </Box>

@@ -68,9 +68,14 @@ export default function PaginaInicial() {
                         </Text>
 
                         <TextField
-                            value={username} onChange={function (event) {                              
+                            value={username} placeholder='Digite seu usuário do GitHub' onChange={function (event) {                              
                                 const valor = event.target.value;                                
-                                setUsername(valor);
+                                if (username.length < 2) {
+                                    const valor = event.target.value;  
+                                    setUsername(valor);
+                                  } else {
+                                    setUsername(valor);
+                                  }
                             }}
 
                             fullWidth                        
@@ -86,6 +91,7 @@ export default function PaginaInicial() {
                         <Button
                             type='submit'
                             label='Entrar'
+                            disabled={username.length <= 2}
                             fullWidth
                             buttonColors={{
                                 contrastColor: appConfig.theme.colors.neutrals["000"],
@@ -136,7 +142,7 @@ export default function PaginaInicial() {
                                 borderRadius: '1000px'
                             }}
                         >
-                            {username}
+                            {username || "Usuario não foi encontrado"}
                         </Text>
                     </Box>
                     {/* Photo Area */}
